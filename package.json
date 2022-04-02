@@ -4,8 +4,8 @@
   "description": "Backend application to serve data to OpenToWork website",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node-dev --respawn --pretty --transpile-only server.ts",
-    "start:prod": "set \"NODE_ENV=production\" ts-node-dev --respawn --pretty --transpile-only server.ts",
+    "start": "ts-node-dev --respawn --pretty --transpile-only src/server.ts",
+    "start:prod": "set \"NODE_ENV=production\" ts-node-dev --respawn --pretty --transpile-only src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,8 +29,11 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
+    "@types/mongoose": "^5.11.97",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "helmet": "^5.0.2"
+    "helmet": "^5.0.2",
+    "mongoose": "^6.2.6"
   }
 }

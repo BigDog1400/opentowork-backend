@@ -2,7 +2,6 @@
  * Required External Modules
  */
 import express, { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import helmet from "helmet";
 import { notFoundHandler } from "./middleware/not-found-middleware";

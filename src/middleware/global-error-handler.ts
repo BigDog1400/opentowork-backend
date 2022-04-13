@@ -16,6 +16,7 @@ const sendErrorProd = (err: AppError, res: Response) => {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
+      data: err.data,
     });
   } else {
     // Programming or other unknown error: don't leak error details

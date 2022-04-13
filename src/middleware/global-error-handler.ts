@@ -34,6 +34,9 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleJWTExpiredError = () =>
+  new AppError("Your token has expired!. Please log in again!", 401);
+
 interface IGlobalErrorHandler {
   (err: any, req: Request, res: Response, next: NextFunction): void;
 }
@@ -47,6 +50,9 @@ const globalErrorHandler: IGlobalErrorHandler = (err, req, res, next) => {
   } else {
     if (err.name === "CastError")
       return sendErrorProd(handleCastErrorDB(err), res);
+    if (err.name === "TokenExpiredError")
+      return sendErrorProd(handleJWTExpiredError(), res);
+
     return sendErrorProd(err, res);
   }
 };

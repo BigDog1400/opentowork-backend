@@ -15,10 +15,13 @@ const getOne = (Model: Model<any>, getOptions?: PopulateOptions) =>
       return next(new AppError("No tour found with that ID", 404));
     }
 
+    // get the the name of the model
+    const modelName = Model.modelName;
+
     res.status(200).json({
       status: "success",
       data: {
-        data: doc,
+        [modelName.toLowerCase()]: doc,
       },
     });
   });
@@ -34,10 +37,13 @@ const updateOne = (Model: Model<any>) =>
       return next(new AppError("No tour found with that ID", 404));
     }
 
+    // get the the name of the model
+    const modelName = Model.modelName;
+
     res.status(200).json({
       status: "success",
       data: {
-        [doc.modelName]: doc,
+        [modelName.toLowerCase()]: doc,
       },
     });
   });
@@ -56,17 +62,22 @@ const getAll = (Model: Model<any>) =>
     res.status(200).json({
       status: "success",
       results: doc.length,
-      data: doc,
+      data: {
+        [Model.collection.name.toLowerCase()]: doc,
+      },
     });
   });
 
 const createOne = (Model: Model<any>) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.create(req.body);
+    // get the the name of the model
+    const modelName = Model.modelName;
+
     res.status(201).json({
       status: "success",
       data: {
-        [doc.modelName]: doc,
+        [modelName.toLowerCase()]: doc,
       },
     });
   });

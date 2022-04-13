@@ -1,33 +1,41 @@
 import { Schema, CallbackWithoutResultAndOptionalError, model } from "mongoose";
-import { IBaseUser } from "./user.interface";
-const userSchema = new Schema<IBaseUser>({
+import { User as UserInterface } from "./user.interface";
+const userSchema = new Schema<UserInterface>({
   name: { type: String, required: true },
+  email: { type: String, required: true },
+  cognito_sub: { type: String },
   bio: { type: String, required: true },
-  website: { type: String, required: true },
+  job_role: { type: String },
+  website: { type: String },
+  open_to_work: { type: Boolean, default: true },
+  salary_range: {
+    min: { type: Number, required: true },
+    max: { type: Number, required: true },
+  },
   role: {
     type: String,
     required: true,
-    enum: ["user", "company"],
-    default: "user",
+    enum: ["Talent", "Company"],
+    default: "Talent",
   },
   active: { type: Boolean, required: true, default: true },
-  technicalSkills: [{ type: String }],
+  technical_skills: [{ type: String }],
   projects: [
     {
       name: String,
       description: String,
     },
   ],
-  workExperience: [
+  work_experience: [
     {
       company: String,
       position: String,
-      startDate: Date,
-      endDate: Date,
+      start_date: Date,
+      end_date: Date,
       description: String,
     },
   ],
-  socialNetworks: [
+  social_networks: [
     {
       name: String,
       url: String,
@@ -44,7 +52,7 @@ userSchema.pre(/^find/, function (next) {
 userSchema.pre(
   "save",
   function (
-    this: IBaseUser,
+    this: UserInterface,
     next: CallbackWithoutResultAndOptionalError
   ): void {
     console.log("New user added");

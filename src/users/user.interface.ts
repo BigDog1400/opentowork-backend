@@ -1,29 +1,34 @@
 import { Types, Document } from "mongoose";
 
-export interface IBaseUser {
+export interface User {
+  _id: Types.ObjectId;
   name: string;
+  email: string;
+  cognito_sub: string;
   website: string;
+  job_role: string;
+  open_to_work: boolean;
+  salary_range: {
+    min: number;
+    max: number;
+  };
   bio: string;
-  role: "user" | "company";
+  role: "Talent" | "Company";
   active: boolean;
-  technicalSkills: string[];
+  technical_skills: string[];
   projects: {
     name: string;
     description: string;
   }[];
-  workExperience: {
+  work_experience: {
     company: string;
     position: string;
-    startDate: Date;
-    endDate: Date | null;
+    start_date: Date;
+    end_date: Date | null;
     description: string;
   }[];
-  socialNetworks: {
+  social_networks: {
     name: string;
     url: string;
   }[];
-}
-
-export interface IUser extends Document {
-  _id: Types.ObjectId;
 }

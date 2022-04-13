@@ -14,6 +14,11 @@ const filterObj = (obj, ...allowedFields) => {
 const getUser = handlerFactory.getOne(User);
 const getAll = handlerFactory.getAll(User);
 
+const getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 // THIS IS RESTRICTED TO ADMIN ONLY
 const updateUser = handlerFactory.updateOne(User);
 
@@ -31,26 +36,22 @@ const updateMe = catchAsync(async (req, res, next) => {
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(
     req.body,
+    "name",
     "bio",
+    "job_role",
     "technicalSkills",
     "website",
     "projects",
     "workExperience",
-    "socialNetworks"
+    "socialNetworks",
+    "salary_range"
   );
-
-  console.log({ filteredBody });
 
   // 3) Update user document
   // the id is hardcode because we don't know yet how to implement jwt from aws cognito
-  const updatedUser = await User.findByIdAndUpdate(
-    "62318744fd85474e040cad59",
-    filteredBody,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  const updatedUser = await User.findByIdAndUpdate(req.user._id, filteredBody, {
+    new: true,
+  });
 
   res.status(200).json({
     status: "success",
@@ -59,4 +60,213 @@ const updateMe = catchAsync(async (req, res, next) => {
     },
   });
 });
-export { getUser, updateUser, getAll, updateMe };
+
+const deleteProject = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $pull: {
+        projects: {
+          _id: req.params.id,
+        },
+      },
+    },
+    { new: true }
+  );
+
+  res.status(204).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const updateProject = catchAsync(async (req, res, next) => {
+  // https://www.mongodb.com/docs/manual/reference/operator/update/positional-filtered/#definition
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        "projects.$[elem].name": req.body.name,
+        "projects.$[elem].description": req.body.description,
+      },
+    },
+    {
+      arrayFilters: [
+        {
+          "elem._id": req.params.id,
+        },
+      ],
+      new: true,
+    }
+  );
+
+  res.status(200).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const addProject = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $push: {
+        projects: {
+          name: req.body.name,
+          description: req.body.description,
+        },
+      },
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const addWorkExperience = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $push: {
+        work_experience: {
+          company: req.body.company,
+          position: req.body.position,
+          start_date: req.body.start_date,
+          end_date: req.body.end_date,
+          description: req.body.description,
+        },
+      },
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const updateWorkExperience = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        "work_experience.$[elem].company": req.body.company,
+        "work_experience.$[elem].position": req.body.position,
+        "work_experience.$[elem].startDate": req.body.startDate,
+        "work_experience.$[elem].endDate": req.body.endDate,
+        "work_experience.$[elem].description": req.body.description,
+      },
+    },
+    {
+      arrayFilters: [
+        {
+          "elem._id": req.params.id,
+        },
+      ],
+      new: true,
+    }
+  );
+  res.status(200).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const deleteWorkExperience = catchAsync(async (req, res, next) => {
+  console.log("Gonna delete work experience");
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $pull: {
+        work_experience: {
+          _id: req.params.id,
+        },
+      },
+    },
+    { new: true }
+  );
+  res.status(204).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const addSocialNetwork = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $push: {
+        social_networks: {
+          name: req.body.name,
+          url: req.body.url,
+        },
+      },
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const updateSocialNetwork = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        "social_networks.$[elem].name": req.body.name,
+        "social_networks.$[elem].url": req.body.url,
+      },
+    },
+    {
+      arrayFilters: [
+        {
+          "elem._id": req.params.id,
+        },
+      ],
+      new: true,
+    }
+  );
+  res.status(200).json({
+    status: "success",
+    data: user,
+  });
+});
+
+const deleteSocialNetwork = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $pull: {
+        social_networks: {
+          _id: req.params.id,
+        },
+      },
+    },
+    { new: true }
+  );
+  res.status(204).json({
+    status: "success",
+    data: user,
+  });
+});
+
+export {
+  getMe,
+  getUser,
+  updateUser,
+  getAll,
+  updateMe,
+  deleteProject,
+  updateProject,
+  addProject,
+  addWorkExperience,
+  updateWorkExperience,
+  deleteWorkExperience,
+  addSocialNetwork,
+  updateSocialNetwork,
+  deleteSocialNetwork,
+};

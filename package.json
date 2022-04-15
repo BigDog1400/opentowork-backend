@@ -29,7 +29,9 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.3",
     "@types/mongoose": "^5.11.97",
+    "@types/paypal__checkout-server-sdk": "^1.0.4",
     "cognito-express": "^3.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",

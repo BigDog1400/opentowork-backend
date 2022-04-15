@@ -1,23 +1,22 @@
 import { Schema, model } from "mongoose";
-import { IBaseJob } from "./job.inteface";
+import { Payment } from "../payments/payment.model";
+import { IBaseJob } from "./job.interface";
 
 const jobSchema = new Schema<IBaseJob>({
-  userId: { type: Schema.Types.ObjectId, required: true },
-  userName: { type: String, required: true },
+  user_id: { type: Schema.Types.ObjectId, required: true },
   title: { type: String, required: true },
   location: [{ type: String }],
-  jobType: { type: String, required: true },
-  minimumExperience: { type: String, required: true },
-  requiredSkills: [{ type: String }],
-  salaryRange: {
+  job_type: { type: String, required: true },
+  minimum_experience: { type: String, required: true },
+  required_skills: [{ type: String }],
+  salary_range: {
     min: Number,
     max: Number,
   },
   description: { type: String, required: true },
-  showSalary: { type: Boolean, required: true },
-  active: { type: Boolean, required: true, default: true },
+  show_salary: { type: Boolean, required: true },
+  active: { type: Boolean, default: false },
   instructions: {},
-  paymentStatus: { type: String, required: true },
 });
 
 export const Job = model("Job", jobSchema);

@@ -8,6 +8,8 @@ dotenv.config({
 export const config = {
   PORT: process.env.PORT,
   DATABASE: process.env.DATABASE,
+  PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID,
+  PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
   DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
   COGNITO: {
     REGION: process.env.COGNITO_REGION,

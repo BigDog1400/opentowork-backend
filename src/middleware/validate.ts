@@ -33,15 +33,13 @@ export const validate = ({
 
     if (result.error) {
       if (useVerboseError) {
-        const detailsErrorObject = result.error.details.map(
-          ({ message, path }) => ({
-            [String(path)]: message.replace(/"/g, ""),
-          })
-        );
+        const detailsErrorObject = {};
 
-        const errorString = detailsErrorObject
-          .map((error) => Object.values(error))
-          .join(", ");
+        result.error.details.forEach(({ message, path }) => {
+          detailsErrorObject[String(path)] = message.replace(/"/g, "");
+        });
+
+        const errorString = Object.values(detailsErrorObject).join(", ");
         return next(new AppError(errorString, 422, detailsErrorObject));
       } else {
         return next(new AppError(customError, 422));

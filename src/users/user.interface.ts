@@ -8,26 +8,24 @@ export interface User {
   website: string;
   job_role: string;
   open_to_work: boolean;
-  salary_range: {
-    min: number;
-    max: number;
-  };
+  salary_expectation?: number;
   bio: string;
   role: "Talent" | "Company";
   active: boolean;
-  technical_skills: string[];
-  projects: {
+  technical_skills?: string[];
+  projects?: {
     name: string;
     description: string;
+    url: string;
   }[];
-  work_experience: {
+  work_experience?: {
     company: string;
     position: string;
     start_date: Date;
     end_date: Date | null;
     description: string;
   }[];
-  social_networks: {
+  social_networks?: {
     name: string;
     url: string;
   }[];

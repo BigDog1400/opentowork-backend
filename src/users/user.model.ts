@@ -1,4 +1,5 @@
 import { Schema, CallbackWithoutResultAndOptionalError, model } from "mongoose";
+
 import { User as UserInterface } from "./user.interface";
 const userSchema = new Schema<UserInterface>({
   name: { type: String, required: true },
@@ -8,10 +9,7 @@ const userSchema = new Schema<UserInterface>({
   job_role: { type: String },
   website: { type: String },
   open_to_work: { type: Boolean, default: true },
-  salary_range: {
-    min: { type: Number, required: true },
-    max: { type: Number, required: true },
-  },
+  salary_expectation: { type: Number, required: true },
   role: {
     type: String,
     required: true,
@@ -24,6 +22,7 @@ const userSchema = new Schema<UserInterface>({
     {
       name: String,
       description: String,
+      url: String,
     },
   ],
   work_experience: [

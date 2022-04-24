@@ -39,12 +39,13 @@ const updateMe = catchAsync(async (req, res, next) => {
     "name",
     "bio",
     "job_role",
-    "technicalSkills",
+    "open_to_work",
+    "technical_skills",
     "website",
     "projects",
-    "workExperience",
-    "socialNetworks",
-    "salary_range"
+    "work_experience",
+    "social_networks",
+    "salary_expectation"
   );
 
   // 3) Update user document
@@ -88,6 +89,7 @@ const updateProject = catchAsync(async (req, res, next) => {
       $set: {
         "projects.$[elem].name": req.body.name,
         "projects.$[elem].description": req.body.description,
+        "projects.$[elem].url": req.body.url,
       },
     },
     {
@@ -102,7 +104,7 @@ const updateProject = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: user,
+    data: { user },
   });
 });
 
@@ -114,6 +116,7 @@ const addProject = catchAsync(async (req, res, next) => {
         projects: {
           name: req.body.name,
           description: req.body.description,
+          url: req.body.url,
         },
       },
     },
@@ -121,7 +124,9 @@ const addProject = catchAsync(async (req, res, next) => {
   );
   res.status(200).json({
     status: "success",
-    data: user,
+    data: {
+      user,
+    },
   });
 });
 
@@ -143,7 +148,7 @@ const addWorkExperience = catchAsync(async (req, res, next) => {
   );
   res.status(200).json({
     status: "success",
-    data: user,
+    data: { user },
   });
 });
 
@@ -170,12 +175,11 @@ const updateWorkExperience = catchAsync(async (req, res, next) => {
   );
   res.status(200).json({
     status: "success",
-    data: user,
+    data: { user },
   });
 });
 
 const deleteWorkExperience = catchAsync(async (req, res, next) => {
-  console.log("Gonna delete work experience");
   const user = await User.findByIdAndUpdate(
     req.user._id,
     {
@@ -208,7 +212,7 @@ const addSocialNetwork = catchAsync(async (req, res, next) => {
   );
   res.status(200).json({
     status: "success",
-    data: user,
+    data: { user },
   });
 });
 
@@ -232,7 +236,7 @@ const updateSocialNetwork = catchAsync(async (req, res, next) => {
   );
   res.status(200).json({
     status: "success",
-    data: user,
+    data: { user },
   });
 });
 

@@ -11,10 +11,11 @@ import {
 
 const usersRouter = express.Router();
 
-usersRouter.use(auth.protect);
+usersRouter.get("/", UserService.getAll);
 
 usersRouter.post(
   "/updateMe",
+  auth.protect,
   validate({
     validator: updateUserSchema,
     useVerboseError: true,
@@ -22,10 +23,13 @@ usersRouter.post(
   UserService.updateMe
 );
 
-usersRouter.get("/me", UserService.getMe, UserService.getUser);
+usersRouter
+  .route("/me")
+  .get(auth.protect, UserService.getMe, UserService.getUser);
 
 usersRouter.post(
   "/projects",
+  auth.protect,
   validate({
     validator: projectSchema,
   }),
@@ -34,6 +38,7 @@ usersRouter.post(
 
 usersRouter.post(
   "/social-networks",
+  auth.protect,
   validate({
     validator: socialNetworkSchema,
   }),
@@ -42,12 +47,17 @@ usersRouter.post(
 
 usersRouter.post(
   "/work-experience",
+  auth.protect,
   validate({
     validator: workExperienceSchema,
     useVerboseError: true,
   }),
   UserService.addWorkExperience
 );
+
+usersRouter.route("/:id").get(UserService.getUser);
+
+usersRouter.use(auth.protect);
 
 usersRouter
   .route("/projects/:id")
@@ -78,10 +88,5 @@ usersRouter
     }),
     UserService.updateWorkExperience
   );
-
-// usersRouter.use(auth.protect);
-
-usersRouter.route("/").get(UserService.getAll);
-// .patch(UserService.updateUser);
 
 export { usersRouter };

@@ -1,5 +1,11 @@
 import Joi from "joi";
 
+export const projectSchema = Joi.object({
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  url: Joi.string(),
+});
+
 export const updateUserSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
@@ -7,19 +13,11 @@ export const updateUserSchema = Joi.object({
   bio: Joi.string(),
   job_role: Joi.string(),
   open_to_work: Joi.boolean(),
-  salary_range: Joi.object({
-    min: Joi.number().required(),
-    max: Joi.number().required(),
-  }),
+  salary_expectation: Joi.number(),
   website: Joi.string(),
-  technicalSkills: Joi.array().items(Joi.string()),
-  projects: Joi.array().items(
-    Joi.object({
-      name: Joi.string().required(),
-      description: Joi.string().required(),
-    })
-  ),
-  workExperience: Joi.array().items(
+  technical_skills: Joi.array().items(Joi.string()),
+  projects: Joi.array().items(projectSchema),
+  work_experience: Joi.array().items(
     Joi.object({
       company: Joi.string().required(),
       position: Joi.string().required(),
@@ -28,17 +26,12 @@ export const updateUserSchema = Joi.object({
       description: Joi.string().required(),
     })
   ),
-  socialNetworks: Joi.array().items(
+  social_networks: Joi.array().items(
     Joi.object({
       name: Joi.string().required(),
       url: Joi.string().required(),
     })
   ),
-});
-
-export const projectSchema = Joi.object({
-  name: Joi.string().required(),
-  description: Joi.string().required(),
 });
 
 export const socialNetworkSchema = Joi.object({

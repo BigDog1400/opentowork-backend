@@ -50,20 +50,29 @@ const updateOne = (Model: Model<any>) =>
 
 const getAll = (Model: Model<any>) =>
   catchAsync(async (req, res, next) => {
-    const features = new APIFeatures(Model.find(), req.query)
+    const features = new APIFeatures(Model.aggregate(), req.query)
       .filter()
       .sort()
       .limitFields()
       .paginate();
 
-    const doc = await features.query;
-
+    // const totalDocs = await features.query.clone().countDocuments();
+    const [{ docs, total }] = await features.query;
+    console.log({ docs });
+    console.log({ total });
     // SEND RESPONSE
     res.status(200).json({
       status: "success",
-      results: doc.length,
       data: {
-        [Model.collection.name.toLowerCase()]: doc,
+        [Model.collection.name.toLowerCase()]: docs,
+      },
+      metadata: {
+        currentPage: Number(features.queryString.page),
+        pageSize: Number(features.queryString.limit),
+        totalPages: Math.ceil(
+          (total[0]?.count || 0) / Number(features.queryString.limit)
+        ),
+        totalResults: total[0]?.count || 0,
       },
     });
   });

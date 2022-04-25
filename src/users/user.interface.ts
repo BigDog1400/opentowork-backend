@@ -7,6 +7,7 @@ export interface User {
   cognito_sub: string;
   website: string;
   job_role: string;
+  photo_url: string;
   open_to_work: boolean;
   salary_expectation?: number;
   bio: string;

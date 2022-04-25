@@ -8,6 +8,7 @@ const userSchema = new Schema<UserInterface>({
   bio: { type: String, required: true },
   job_role: { type: String },
   website: { type: String },
+  photo_url: { type: String },
   open_to_work: { type: Boolean, default: true },
   salary_expectation: { type: Number, required: true },
   role: {

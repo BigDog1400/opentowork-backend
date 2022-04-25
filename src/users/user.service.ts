@@ -45,7 +45,8 @@ const updateMe = catchAsync(async (req, res, next) => {
     "projects",
     "work_experience",
     "social_networks",
-    "salary_expectation"
+    "salary_expectation",
+    "photo_url"
   );
 
   // 3) Update user document

@@ -15,6 +15,7 @@ export const updateUserSchema = Joi.object({
   open_to_work: Joi.boolean(),
   salary_expectation: Joi.number(),
   website: Joi.string(),
+  photo_url: Joi.string(),
   technical_skills: Joi.array().items(Joi.string()),
   projects: Joi.array().items(projectSchema),
   work_experience: Joi.array().items(

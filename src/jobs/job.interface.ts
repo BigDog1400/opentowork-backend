@@ -16,5 +16,5 @@ export interface IBaseJob {
   description: string;
   show_salary: boolean;
   active: boolean;
-  instructions: Record<any, unknown>;
+  instructions: string;
 }

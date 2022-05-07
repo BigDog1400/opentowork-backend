@@ -3,17 +3,8 @@ import { handlerFactory } from "../common/handler-factory";
 import { Payment } from "../payments/payment.model";
 import { Job } from "./job.model";
 import paypal from "@paypal/checkout-server-sdk";
-import { config } from "../configs/envVariables";
 import AppError from "../common/app-error";
-
-const PaypalEnvironment =
-  process.env.NODE_ENV === "production"
-    ? paypal.core.LiveEnvironment
-    : paypal.core.SandboxEnvironment;
-
-const paypalClient = new paypal.core.PayPalHttpClient(
-  new PaypalEnvironment(config.PAYPAL_CLIENT_ID, config.PAYPAL_CLIENT_SECRET)
-);
+import { paypalClient } from "../common/paypalClientInstance";
 
 const createPaypalOrder = async ({ value }: { value: string }) =>
   new Promise(async (resolve, reject) => {
@@ -89,7 +80,7 @@ const createJob = catchAsync(async (req, res, next) => {
     }
   }
 
-  await Payment.create({
+  const payment = await Payment.create({
     job: doc._id,
     user: doc.user_id,
     amount: doc.active ? 0 : total,
@@ -100,6 +91,7 @@ const createJob = catchAsync(async (req, res, next) => {
     free_charge: doc.active,
     order_id,
   });
+
   // get the the name of the model
   const modelName = Job.modelName;
 
@@ -109,6 +101,7 @@ const createJob = catchAsync(async (req, res, next) => {
       [modelName.toLowerCase()]: {
         ...doc.toObject(),
         order_id,
+        payment,
       },
     },
   });

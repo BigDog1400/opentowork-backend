@@ -4,6 +4,9 @@ import { IBaseJob } from "./job.interface";
 
 const jobSchema = new Schema<IBaseJob>({
   user_id: { type: Schema.Types.ObjectId, required: true },
+  company: {
+    name: { type: String, required: true },
+  },
   title: { type: String, required: true },
   location: [{ type: String }],
   job_type: { type: String, required: true },

@@ -4,6 +4,9 @@ import { IBaseJob } from "./job.interface";
 export const JobSchema = Joi.object<IBaseJob>({
   active: Joi.boolean(),
   description: Joi.string().required(),
+  company: Joi.object({
+    name: Joi.string(),
+  }),
   instructions: Joi.string().required(),
   job_type: Joi.string().required(),
   location: Joi.array().items(Joi.string()).required(),

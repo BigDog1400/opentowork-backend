@@ -33,7 +33,11 @@ const createPaypalOrder = async ({ value }: { value: string }) =>
 const getJob = handlerFactory.getOne(Job);
 const getAll = handlerFactory.getAll(Job);
 const createJob = catchAsync(async (req, res, next) => {
-  req.body = { ...req.body, user_id: req.user._id };
+  req.body = {
+    ...req.body,
+    user_id: req.user._id,
+    company: { name: req.user.name },
+  };
 
   const jobsWithFreeCharge = await Payment.aggregate([
     {

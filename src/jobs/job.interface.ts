@@ -3,7 +3,9 @@ import { Types } from "mongoose";
 export interface IBaseJob {
   _id: Types.ObjectId;
   user_id: Types.ObjectId;
-  username: string;
+  company: {
+    name: string;
+  };
   title: string;
   location: string[];
   job_type: string;

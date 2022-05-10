@@ -8,8 +8,9 @@ export const JobSchema = Joi.object<IBaseJob>({
     name: Joi.string(),
   }),
   instructions: Joi.string().required(),
+  remote: Joi.boolean(),
   job_type: Joi.string().required(),
-  location: Joi.array().items(Joi.string()).required(),
+  location: Joi.array().items(Joi.number()).required(),
   minimum_experience: Joi.string().required(),
   required_skills: Joi.array().items(Joi.string()).required(),
   salary_range: Joi.object({

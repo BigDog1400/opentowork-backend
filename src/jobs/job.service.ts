@@ -36,7 +36,10 @@ const createJob = catchAsync(async (req, res, next) => {
   req.body = {
     ...req.body,
     user_id: req.user._id,
-    company: { name: req.user.name },
+    company: {
+      name: req.user.name,
+      photo_url: req.user.photo_url,
+    },
   };
 
   const jobsWithFreeCharge = await Payment.aggregate([

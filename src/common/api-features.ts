@@ -17,7 +17,13 @@ class APIFeatures {
       /\b(gte|gt|eq|lte|in|lt)\b/g,
       (match) => `$${match}`
     );
-    const queryObjParsed = JSON.parse(queryStr);
+
+    const queryObjParsed = JSON.parse(queryStr, (key, value) => {
+      if (value === "true") return true;
+      if (value === "false") return false;
+      return value;
+    });
+
     // we should check if any of the key in queryObjParsed has $in filter
     // if so, we should convert the string value separated by comma to array
     Object.keys(queryObjParsed).forEach((el) => {

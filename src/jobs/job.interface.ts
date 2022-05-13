@@ -10,6 +10,7 @@ export interface IBaseJob {
   };
   title: string;
   location: number[];
+  crypto_payment: boolean;
   job_type: string;
   remote: boolean;
   minimum_experience: string;

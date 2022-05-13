@@ -12,6 +12,9 @@ const jobSchema = new Schema<IBaseJob>({
     name: { type: String, required: true },
     photo_url: { type: String, required: true },
   },
+  crypto_payment: {
+    type: Boolean,
+  },
   remote: { type: Boolean, required: true },
   title: { type: String, required: true },
   location: [{ type: Number }],

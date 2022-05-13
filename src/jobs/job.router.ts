@@ -9,7 +9,7 @@ const jobsRouter = express.Router();
 
 jobsRouter
   .route("/")
-  .get(JobService.getAll)
+  .get(JobService.setValueFormats, JobService.getAll)
   .post(
     auth.protect,
     auth.restrictTo("Company"),

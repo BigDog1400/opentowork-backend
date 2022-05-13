@@ -7,6 +7,7 @@ export const JobSchema = Joi.object<IBaseJob>({
   company: Joi.object({
     name: Joi.string(),
   }),
+  crypto_payment: Joi.boolean(),
   instructions: Joi.string().required(),
   remote: Joi.boolean(),
   job_type: Joi.string().required(),

@@ -114,4 +114,26 @@ const createJob = catchAsync(async (req, res, next) => {
   });
 });
 
-export { getAll, getJob, createJob };
+const setValueFormats = (req, res, next) => {
+  // we need to convert the value of the key to a number
+  // first need to check if the key starts with salary_range[any]
+  const keys = Object.keys(req.query);
+  const salaryKeys = keys.filter((key) => key.startsWith("salary_range"));
+  salaryKeys.forEach((salaryFilterKey) => {
+    // this object will contains the key and the value that are being used to filter
+    // ej: salary_range.min: { gt: '3100' }
+    const objectFilter = req.query[salaryFilterKey];
+    // this will be the key that we will use to filter the value
+    const keys = Object.keys(objectFilter);
+    keys.forEach((key) => {
+      const value = objectFilter[key];
+      if (value) {
+        req.query[salaryFilterKey][key] = Number(value);
+      }
+    });
+  });
+
+  next();
+};
+
+export { getAll, getJob, createJob, setValueFormats };

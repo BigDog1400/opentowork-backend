@@ -47,7 +47,7 @@ const userSchema = new Schema<UserInterface>({
 
 userSchema.pre(/^find/, function (next) {
   // this point to the current query
-  this.find({ active: { $ne: false } });
+  this.find({ active: { $ne: false }, profile_completed: { $ne: false } });
   next();
 });
 

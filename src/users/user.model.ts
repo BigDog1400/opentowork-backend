@@ -1,6 +1,7 @@
 import { Schema, CallbackWithoutResultAndOptionalError, model } from "mongoose";
 
 import { User as UserInterface } from "./user.interface";
+
 const userSchema = new Schema<UserInterface>({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -11,6 +12,7 @@ const userSchema = new Schema<UserInterface>({
   photo_url: { type: String },
   open_to_work: { type: Boolean, default: true },
   salary_expectation: { type: Number, required: true },
+  profile_completed: { type: Boolean, default: false },
   role: {
     type: String,
     required: true,
@@ -46,6 +48,43 @@ const userSchema = new Schema<UserInterface>({
 userSchema.pre(/^find/, function (next) {
   // this point to the current query
   this.find({ active: { $ne: false } });
+  next();
+});
+
+// findByIdAndUpdate
+// findByIdAndDelete
+userSchema.pre(/^findOneAnd/, async function (next) {
+  const user = await this.findOne().clone();
+
+  if (user.role === "Company") {
+    if (!this.getUpdate().name) {
+      this.set({
+        profile_completed: false,
+      });
+    } else {
+      this.set({
+        profile_completed: true,
+      });
+    }
+  }
+  if (user.role === "Talent") {
+    if (
+      !this.getUpdate().name ||
+      !this.getUpdate().job_role ||
+      !this.getUpdate().bio ||
+      !this.getUpdate().technical_skills ||
+      !this.getUpdate().salary_expectation
+    ) {
+      this.set({
+        profile_completed: false,
+      });
+    } else {
+      this.set({
+        profile_completed: true,
+      });
+    }
+  }
+
   next();
 });
 

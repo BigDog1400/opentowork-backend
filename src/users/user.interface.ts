@@ -30,4 +30,5 @@ export interface User {
     name: string;
     url: string;
   }[];
+  profile_completed: boolean;
 }

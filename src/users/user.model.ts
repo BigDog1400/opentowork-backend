@@ -1,4 +1,9 @@
-import { Schema, CallbackWithoutResultAndOptionalError, model } from "mongoose";
+import {
+  Schema,
+  CallbackWithoutResultAndOptionalError,
+  model,
+  Aggregate,
+} from "mongoose";
 
 import { User as UserInterface } from "./user.interface";
 
@@ -43,12 +48,6 @@ const userSchema = new Schema<UserInterface>({
       url: String,
     },
   ],
-});
-
-userSchema.pre(/^find/, function (next) {
-  // this point to the current query
-  this.find({ active: { $ne: false }, profile_completed: { $ne: false } });
-  next();
 });
 
 // findByIdAndUpdate
@@ -98,5 +97,15 @@ userSchema.pre(
     next();
   }
 );
+
+userSchema.pre<Aggregate<UserInterface>>("aggregate", function (next) {
+  this.pipeline().unshift({
+    $match: {
+      active: { $ne: false },
+      profile_completed: { $ne: false },
+    },
+  });
+  next();
+});
 
 export const User = model("User", userSchema);
